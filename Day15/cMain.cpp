@@ -28,7 +28,7 @@ char shape[4][13][8] =
 		{1,0,0,0,0,1,0,1},
 		{1,0,1,1,1,0,1,1},
 		{1,1,0,0,0,0,1,1},
-		{1,0,1,0,0,1,0,1},
+		{1,0,2,0,0,2,0,1},
 		{0,1,0,0,0,0,1,0},
 		{1,1,1,1,1,1,1,1},
 		{1,0,0,0,0,0,0,1},
@@ -44,9 +44,9 @@ char shape[4][13][8] =
 		{1,1,0,0,0,0,0,1},	 
 		{1,0,1,1,1,0,0,1},	 
 		{1,0,0,0,0,1,0,1},	 
-		{0,1,0,1,0,0,1,0},	 
+		{0,2,0,2,0,0,1,0},	 
 		{1,0,0,0,0,1,1,0},	 
-		{0,1,1,1,1,1,0,0},	 
+		{0,1,1,1,1,0,0,0},	 
 		{1,0,0,0,0,1,0,0},	 
 		{1,0,1,1,0,1,0,0},
 		{0,1,0,0,1,0,0,0},
@@ -60,9 +60,9 @@ char shape[4][13][8] =
 		{1,0,0,0,0,0,1,1},
 		{1,0,0,1,1,1,0,1},
 		{1,0,1,0,0,0,0,1},
-		{0,1,0,0,1,0,1,0},
+		{0,1,0,0,2,0,2,0},
 		{0,1,1,0,0,0,0,1},
-		{0,0,1,1,1,1,1,0},
+		{0,0,0,1,1,1,1,0},
 		{0,0,1,0,0,0,0,1},
 		{0,0,1,0,1,1,0,1},
 		{0,0,0,1,0,0,1,0},
@@ -85,11 +85,28 @@ char shape[4][13][8] =
 	},
 };
 
+struct Obj
+{
+	int x;
+	int y;
+	Dir dir;
+	char (*shape)[13][8];
+};
+
+struct Heart
+{
+	int x;
+	int y;
+
+};
+
 int main()
 {
-	int playerX = 10;
-	int playerY = 10;
-	Dir dir = DOWN;
+	Obj player;
+	player.x = 10;
+	player.y = 10;
+	player.dir = DOWN;
+	player.shape = shape;
 
 	while (true)
 	{
@@ -97,26 +114,26 @@ int main()
 		
 		if (GetAsyncKeyState(VK_LEFT))
 		{
-			playerX--;
-			dir = LEFT;
+			player.x--;
+			player.dir = LEFT;
 
 		}
 		if (GetAsyncKeyState(VK_RIGHT))
 		{
-			playerX++;
-			dir = RIGHT;
+			player.x++;
+			player.dir = RIGHT;
 
 		}
 		if (GetAsyncKeyState(VK_UP))
 		{
 
-			playerY--;
-			dir = UP;
+			player.y--;
+			player.dir = UP;
 		}
 		if (GetAsyncKeyState(VK_DOWN))
 		{
-			playerY++;
-			dir = DOWN;
+			player.y++;
+			player.dir = DOWN;
 		}
 
 
@@ -124,11 +141,15 @@ int main()
 		{
 			for (int x = 0; x < 8; x++)
 			{
-				switch (shape[dir][y][x])
+				switch (shape[player.dir][y][x])
 				{
 				case 1:
-					SetPosition(playerX + x, playerY + y);
+					SetPosition(player.x + x, player.y + y);
 					printf("бс");
+					break;
+				case 2:
+					SetPosition(player.x + x, player.y + y);
+					printf("б▄");
 					break;
 				default:
 					break;
