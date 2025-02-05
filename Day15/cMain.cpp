@@ -1,6 +1,37 @@
 #include <stdio.h>
 #include <Windows.h>
 
+#pragma region Enum
+
+enum Color
+{
+	Black,
+	DarkBlue,
+	DarkGreen,
+	DarkCyan,
+	DarkRed,
+	DarkMagenta,
+	DarkYellow,
+	Gray,
+	DarkGray,
+	Blue,
+	Green,
+	Cyan,
+	Red,
+	Magenta,
+	Yellow,
+	White,
+};
+#pragma endregion
+
+
+//»ö±ò ¹Ù²Ù±â
+void ChangeColor(Color color)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
+
 void SetPosition(int x, int y)
 {
 	COORD pos;
@@ -18,7 +49,7 @@ enum Dir
 };
 
 
-char shape[4][13][8] =
+char playerShape[4][13][8] =
 {
 	{	 //Down
 		{0,0,1,1,0,0,0,0},
@@ -93,11 +124,21 @@ struct Obj
 	char (*shape)[13][8];
 };
 
+char heartShape[6][7] =
+{
+	{0,1,1,0,1,1,0},
+	{1,1,1,1,1,1,1},
+	{1,1,1,1,1,1,1},
+	{0,1,1,1,1,1,0},
+	{0,0,1,1,1,0,0},
+	{0,0,0,1,0,0,0},
+};
+
 struct Heart
 {
 	int x;
 	int y;
-
+	char (*shape)[7];
 };
 
 int main()
@@ -106,7 +147,7 @@ int main()
 	player.x = 10;
 	player.y = 10;
 	player.dir = DOWN;
-	player.shape = shape;
+	player.shape = playerShape;
 
 	while (true)
 	{
@@ -141,15 +182,37 @@ int main()
 		{
 			for (int x = 0; x < 8; x++)
 			{
-				switch (shape[player.dir][y][x])
+				switch (playerShape[player.dir][y][x])
 				{
 				case 1:
+
+					ChangeColor(White);
 					SetPosition(player.x + x, player.y + y);
 					printf("¡á");
 					break;
 				case 2:
+
+					ChangeColor(Blue);
 					SetPosition(player.x + x, player.y + y);
 					printf("¡Ü");
+					break;
+				default:
+					break;
+
+				}
+			}
+		}
+
+		for (int y = 0; y < 6; y++)
+		{
+			for (int x = 0; x < 7; x++)
+			{
+				switch (heartShape[y][x])
+				{
+				case 1:
+					ChangeColor(Red);
+					SetPosition(x, y);
+					printf("¡á");
 					break;
 				default:
 					break;
